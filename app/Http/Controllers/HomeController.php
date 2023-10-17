@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Home;
 use App\Http\Requests\StoreHomeRequest;
 use App\Http\Requests\UpdateHomeRequest;
+use App\Models\News;
 
 class HomeController extends Controller
 {
+    protected $news;
+    public function __construct(News $news)
+    {
+        $this->news = $news;
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('home');
+        $news = News::all();
+        return view('home', compact('news'));
     }
 
     /**
