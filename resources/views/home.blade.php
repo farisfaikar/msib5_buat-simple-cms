@@ -30,7 +30,7 @@
         </a>
         <div>
           @auth
-            <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
           @else
             <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
 
@@ -49,15 +49,16 @@
       </div>
 
       <div class="mt-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          @for ($i = 0; $i < 4; $i++)
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+          @foreach ($news as $n)
             @include('partials.news-card', [
-                'link' => 'bebas.com',
-                'image' => 'https://source.unsplash.com/800x400',
-                'headline' => 'Lorem Ipsum',
-                'content' => 'Text something idk Lorem',
+                'link' => $n->link,
+                'image' => $n->image,
+                'headline' => $n->headline,
+                'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,
+                'index' => $loop->index,
             ])
-          @endfor
+          @endforeach
         </div>
       </div>
 

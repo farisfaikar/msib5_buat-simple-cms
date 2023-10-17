@@ -34,6 +34,11 @@
 
     <!-- Page Content -->
     <main>
+      <!-- Success Alert -->
+      @if (session()->has('success'))
+        @include('components.alert-success', ['message' => session('success')])
+      @endif
+
       {{ $slot }}
     </main>
   </div>
