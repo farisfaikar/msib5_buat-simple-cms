@@ -13,11 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->uuid()->primary()->unique()->default(Str::uuid());
+            $table->uuid()->primary()->unique();
             $table->string('image');
             $table->string('headline');
             $table->text('content');
-            $table->string('author');
+            $table->foreignUuid('user_uuid')->nullable()->constrained('users', 'uuid')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('read_time');
             $table->timestamps();
         });
