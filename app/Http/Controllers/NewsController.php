@@ -45,7 +45,7 @@ class NewsController extends Controller
         $words = str_word_count(strip_tags($request->content)); // Count words in the content
         $averageWordsPerMinute = 200;
         $read_time = ceil($words / $averageWordsPerMinute);
-        
+
         $news = new News;
         $news->image = $request->image;
         $news->headline = $request->headline;
