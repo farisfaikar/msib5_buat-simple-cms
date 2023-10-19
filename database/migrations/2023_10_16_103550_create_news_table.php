@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->uuid()->primary()->unique();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('headline');
             $table->text('content');
             $table->foreignUuid('user_uuid')->nullable()->constrained('users', 'uuid')->nullOnDelete()->cascadeOnUpdate();

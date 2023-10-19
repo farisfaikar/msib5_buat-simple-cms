@@ -25,7 +25,7 @@
       </a>
     </div>
     <div class="relative overflow-x-auto shadow-lg sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
+      <table class="min-w-[64rem] w-full text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
           <tr>
             <th scope="col" class="px-6 py-3">
@@ -51,7 +51,13 @@
           @foreach ($news as $n)
             <tr class="dark:border-gray-800 border-b">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                <img src="{{ $n->image }}" alt="{{ $n->headline }}" class="rounded-md w-64">
+                @if ($n->image !== null)
+                  <img src="{{ asset($n->image) }}" alt="{{ $n->headline }}" class="rounded-md w-64">
+                @else
+                  @foreach ($n->media as $image)
+                    <img src="{{ asset($image->getUrl()) }}" alt="{{ $n->headline }}" class="rounded-md w-64">
+                  @endforeach
+                @endif
               </th>
               <td class="px-6 py-4">
                 {{ $n->headline }}
@@ -66,7 +72,7 @@
                 {{ $n->read_time }} minutes
               </td>
               <td class="px-6 py-4">
-                <div class="flex gap-1 justify-between items-center">
+                <div class="flex lg:flex-row flex-col gap-1 justify-between items-center">
                   <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Details</a>
                   <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                   <a href="#" class="font-medium text-blue-600 dark:text-red-500 hover:underline">Delete</a>

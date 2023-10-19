@@ -23,7 +23,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = $this->news->paginate(10);
+        $news = $this->news::with('media')->get();
         return view('news.index', compact('news'));
     }
 
@@ -45,16 +45,14 @@ class NewsController extends Controller
         $words = str_word_count(strip_tags($request->content)); // Count words in the content
         $averageWordsPerMinute = 200;
         $read_time = ceil($words / $averageWordsPerMinute);
-
+        
         $news = new News;
-        $news->image = $request->image;
+        $news->addMediaFromRequest('image')->toMediaCollection('news');
         $news->headline = $request->headline;
         $news->content = $request->content;
         $news->user_uuid = $request->user_uuid;
         $news->read_time = $read_time;
         $news->save();
-
-        $news->addMediaFromRequest('image')->toMediaCollection('news');
 
         return redirect()->route("news.index");
     }
