@@ -22,7 +22,11 @@ class StoreNewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'image' => 'required|image',
+            'headline' => 'required|string',
+            'content' => 'required|string',
+            'read_time' => 'integer',
+            'user_uuid' => 'required|string',
         ];
     }
 }
