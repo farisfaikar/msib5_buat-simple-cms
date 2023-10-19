@@ -39,6 +39,11 @@
         @include('components.alert-success', ['message' => session('success')])
       @endif
 
+      <!-- Failure Alert -->
+      @if (session()->has('fail'))
+        @include('components.alert-fail', ['message' => session('fail')])
+      @endif
+
       {{ $slot }}
     </main>
   </div>

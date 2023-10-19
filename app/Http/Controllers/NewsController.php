@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
+use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -38,23 +39,22 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNewsRequest $request)
+    public function store(Request $request)
     {
-        $input = $request->all();
-        $news = new News();
-        $news->uuid = Str::uuid();
-        $news->image = $input["image"];
-        $news->headline = $input["headline"];
-        $news->content = $input["content"];
-        $news->user_uuid = $input["user_uuid"];
-
         // Calculate read time
-        $words = str_word_count(strip_tags($input["content"])); // Count words in the content
+        $words = str_word_count(strip_tags($request->content)); // Count words in the content
         $averageWordsPerMinute = 200;
         $read_time = ceil($words / $averageWordsPerMinute);
+
+        $news = new News;
+        $news->image = $request->image;
+        $news->headline = $request->headline;
+        $news->content = $request->content;
+        $news->user_uuid = $request->user_uuid;
         $news->read_time = $read_time;
-        
         $news->save();
+
+        $news->addMediaFromRequest('image')->toMediaCollection('news');
 
         return redirect()->route("news.index");
     }

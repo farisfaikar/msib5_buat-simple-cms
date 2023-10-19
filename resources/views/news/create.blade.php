@@ -7,7 +7,7 @@
 
   <!-- News Form -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <form method="post" action="{{ route('news.store') }}" class="mt-6 space-y-6">
+    <form method="post" enctype="multipart/form-data" action="{{ route('news.store') }}" class="mt-6 space-y-6">
       @csrf
 
       <div>
