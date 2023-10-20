@@ -53,7 +53,7 @@
           @foreach ($news as $n)
             @if ($n->image !== null)
               @include('partials.news-card', [
-                  'link' => $n->link,
+                  'news' => $n,
                   'image' => $n->image,
                   'headline' => $n->headline,
                   'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,
@@ -62,7 +62,7 @@
             @elseif ($n->media)
               @foreach ($n->media as $image)
                 @include('partials.news-card', [
-                    'link' => $n->link,
+                    'news' => $n,
                     'image' => $image->getUrl(),
                     'headline' => $n->headline,
                     'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,

@@ -1,6 +1,6 @@
-import './bootstrap';
+import "./bootstrap";
 
-import Alpine from 'alpinejs';
+import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
@@ -8,13 +8,14 @@ Alpine.start();
 
 // --- Custom JavaScript --- //
 
-import { Dismiss } from 'flowbite';
+import { Dismiss } from "flowbite";
 
-const targetEl = document.getElementById('alert-success');
-const triggerEl = document.getElementById('trigger-hide-alert-succes');
+// Dismiss
+const targetDismiss = document.getElementById("alert-success");
+const triggerDismiss = document.getElementById("trigger-hide-alert-succes");
 
-const dismiss = new Dismiss(targetEl, triggerEl);
+const dismiss = new Dismiss(targetDismiss, triggerDismiss);
 
 setTimeout(() => {
-  dismiss.hide();
+    dismiss.hide();
 }, 2000);
