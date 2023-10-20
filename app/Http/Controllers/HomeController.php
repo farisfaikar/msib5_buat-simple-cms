@@ -20,7 +20,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $news = News::all();
+        $news = $this->news::with('media')->orderBy('created_at', 'desc')->get();
         return view('home', compact('news'));
     }
 

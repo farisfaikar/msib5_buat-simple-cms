@@ -22,7 +22,7 @@
   <div class="relative sm:flex sm:flex-col sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
     @if (Route::has('login'))
       <!-- Navbar -->
-      <div class="flex justify-between items-center sm:sticky sm:top-0 sm:right-0 backdrop-blur-sm px-6 lg:px-8 py-4 text-right z-10 dark:bg-gray-900/50 w-full">
+      <div class="flex justify-between items-center sticky top-0 backdrop-blur-sm px-6 lg:px-8 py-4 text-right z-10 dark:bg-gray-900/50 w-full">
         <!-- Logo -->
         <a href="{{ route('home') }}" class="flex items-center gap-4 hover:bg-gray-800 rounded p-2 focus:outline-red-500 focus:outline focus:outline-2">
           <x-application-logo class="w-auto h-8 stroke-red-500" />
@@ -48,16 +48,28 @@
         <h1 class="text-4xl font-semibold text-gray-900 dark:text-white">Hottest News!</h1>
       </div>
 
-      <div class="mt-16">
+      <div class="mt-10">
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           @foreach ($news as $n)
-            @include('partials.news-card', [
-                'link' => $n->link,
-                'image' => $n->image,
-                'headline' => $n->headline,
-                'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,
-                'index' => $loop->index,
-            ])
+            @if ($n->image !== null)
+              @include('partials.news-card', [
+                  'news' => $n,
+                  'image' => $n->image,
+                  'headline' => $n->headline,
+                  'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,
+                  'index' => $loop->index,
+              ])
+            @elseif ($n->media)
+              @foreach ($n->media as $image)
+                @include('partials.news-card', [
+                    'news' => $n,
+                    'image' => $image->getUrl(),
+                    'headline' => $n->headline,
+                    'content' => strlen($n->content) > 50 ? substr($n->content, 0, 50) . '...' : $n->content,
+                    'index' => $loop->index,
+                ])
+              @endforeach
+            @endif
           @endforeach
         </div>
       </div>

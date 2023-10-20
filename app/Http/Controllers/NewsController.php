@@ -23,7 +23,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = $this->news->paginate(10);
+        $news = $this->news::with('media')->orderBy('created_at', 'desc')->get();
         return view('news.index', compact('news'));
     }
 
@@ -45,16 +45,14 @@ class NewsController extends Controller
         $words = str_word_count(strip_tags($request->content)); // Count words in the content
         $averageWordsPerMinute = 200;
         $read_time = ceil($words / $averageWordsPerMinute);
-
+        
         $news = new News;
-        $news->image = $request->image;
+        $news->addMediaFromRequest('image')->toMediaCollection('news');
         $news->headline = $request->headline;
         $news->content = $request->content;
         $news->user_uuid = $request->user_uuid;
         $news->read_time = $read_time;
         $news->save();
-
-        $news->addMediaFromRequest('image')->toMediaCollection('news');
 
         return redirect()->route("news.index");
     }
@@ -64,7 +62,8 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        //
+        $users = $this->user->all();
+        return view('news.show', compact('news', 'users'));
     }
 
     /**
@@ -72,7 +71,9 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        //
+        $users = $this->user->all();
+        // $news = $news->with('media')->where('uuid', $news->uuid)->first();
+        return view('news.edit', compact('news', 'users'));
     }
 
     /**
@@ -80,7 +81,19 @@ class NewsController extends Controller
      */
     public function update(UpdateNewsRequest $request, News $news)
     {
-        //
+        // Calculate read time
+        $words = str_word_count(strip_tags($request->content)); // Count words in the content
+        $averageWordsPerMinute = 200;
+        $read_time = ceil($words / $averageWordsPerMinute);
+        
+        $news->headline = $request->headline;
+        $news->content = $request->content;
+        $news->user_uuid = $request->user_uuid;
+        $news->read_time = $read_time;
+        $news->save();
+        $news->addMediaFromRequest('image')->toMediaCollection('news');
+        
+        return redirect()->route("news.index");
     }
 
     /**
@@ -88,6 +101,9 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        //
+        $news = $this->news->find($news->uuid);
+        $news->delete();
+
+        return redirect()->route("news.index");
     }
 }

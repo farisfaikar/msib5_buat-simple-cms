@@ -17,20 +17,17 @@ class NewsFactory extends Factory
      */
     public function definition(): array
     {
-        $content = fake()->paragraph();
-
+        $content = fake()->realTextBetween(100, 10000);
         $words = str_word_count(strip_tags($content)); // Count words in the content
-
         $averageWordsPerMinute = 200;
-
         $readTime = ceil($words / $averageWordsPerMinute);
 
         return [
             "uuid" => fake()->uuid(),
-            "headline" => fake()->sentence(),
+            "headline" => fake()->realTextBetween(10, 50),
             "image" => fake()->imageUrl(),
             "user_uuid" => User::where('role', 'admin')->inRandomOrder()->first()->uuid,
-            "content" => fake()->paragraph(),
+            "content" => $content,
             "read_time" => $readTime,
         ];
     }
